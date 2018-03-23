@@ -70,6 +70,8 @@ def train(config):
     ts = []
     es = []
 
+    fig, plots = plt.subplots(1, 2)
+
     for t in range(num_steps):
 
         ################################################################
@@ -129,16 +131,19 @@ def train(config):
 
                 # Show a plot of the ground truth and prediction of the singla
                 if validation_step == 0:
-                    plt.clf()
-                    plots = plt.subplots(1, 2)
+                    # plt.clf()
                     # plt.title("Ground Truth and Predictions")
                     mse = np.square(np.subtract(y_validation[index_start:index_start+256], predictions[0:256])).mean()
                     print("[%s] Mean squared error: %.5f" % (datetime.now().strftime("%Y-%m-%d %H:%M"), mse))
                     ts.append(t)
                     es.append(mse)
+                    plots[1].cla()
                     plots[1].plot(ts, es)
+                    plots[1].set_xlabel("Steps")
+                    plots[0].cla()
                     plots[0].plot(y_validation[index_start:index_start+256], color="b", label="actual")
                     plots[0].plot(predictions[0:256], color="g", ls='--', label="predicted")
+                    plots[0].set_xlabel("Time")
                     legend = plots[0].legend(loc="upper center", ncol=2)
                     legend.get_frame().set_facecolor('white')
                     plt.draw()
